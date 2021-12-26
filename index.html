@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hooks-law</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        background-color: #dfdede;
+        font-family: "Courier New", Courier, monospace;
+        height: 100%;
+      }
+
+      body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        margin-bottom: 1em;
+      }
+
+      .canvas-container {
+        box-shadow: 0 0 1em rgba(0, 0, 0, 0.5);
+        background-color: white;
+        display: inline-flex;
+        margin-bottom: 1em;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+      }
+
+      form > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hooks Law</h1>
+    <div class="canvas-container">
+      <canvas width="240" height="240"></canvas>
+    </div>
+    <form>
+      <div>
+        <label for="stiffness">Stiffness</label>
+        <input type="range" id="stiffness" min="10" max="300" value="170" />
+      </div>
+      <div>
+        <label for="damping">Damping</label>
+        <input type="range" id="damping" min="10" max="100" value="25" />
+      </div>
+      <div>
+        <label for="mass">Mass</label>
+        <input type="range" id="mass" min="1" max="100" value="5" />
+      </div>
+    </form>
+    <script src="./script.js"></script>
+  </body>
+</html>
