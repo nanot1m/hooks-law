@@ -24,7 +24,7 @@ const HEIGHT = canvas.height;
 
 prepareCanvas(ctx, WIDTH, HEIGHT);
 
-const box = { x: 10, y: 10, width: 20, height: 20, backgroundColor: "black" };
+const box = { x: 10, y: 10, width: 20, height: 20, backgroundColor: "red" };
 
 let stiffness = +stiffnessInput.value;
 let damping = +dampingInput.value;
@@ -70,11 +70,37 @@ massInput.addEventListener("change", function () {
   mass = +this.value;
 });
 
-function renderLoop(previousTime = Date.now()) {
+function stack(size) {
+  const stash = Array(size);
+  return {
+    push(item) {
+      if (stash.length === size) {
+        stash.shift();
+      }
+      stash.push(item);
+    },
+    forEach(fn) {
+      stash.forEach(fn);
+    },
+  };
+}
+
+const TAIL_SIZE = 100;
+const tail = stack(TAIL_SIZE);
+
+let prevElapsedTime;
+function renderLoop(elapsedTime) {
+  if (prevElapsedTime === undefined) {
+    prevElapsedTime = elapsedTime;
+  }
+  const dt = elapsedTime - prevElapsedTime;
   clearCanvas(ctx);
 
-  const now = Date.now();
-  const dt = now - previousTime;
+  tail.push({ ...box });
+  tail.forEach((box, idx) => {
+    const color = `hsl(${(idx * 360) / TAIL_SIZE}, 100%, 50%)`;
+    drawBox(ctx, { ...box, backgroundColor: color });
+  });
   box.x = stepperX(box.x, targetX, dt);
   box.y = stepperY(box.y, targetY, dt);
   drawBox(ctx, box);
@@ -84,13 +110,13 @@ function renderLoop(previousTime = Date.now()) {
     ctx,
     { x: box.x + halfWidth, y: box.y + halfHeight },
     { x: targetX + halfWidth, y: targetY + halfHeight },
-    "red"
+    "black"
   );
-
-  requestAnimationFrame(() => renderLoop(now));
+  prevElapsedTime = elapsedTime;
+  requestAnimationFrame(renderLoop);
 }
 
-renderLoop();
+requestAnimationFrame(renderLoop);
 
 /**
  * @typedef {Object} Box
